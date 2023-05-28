@@ -3,8 +3,8 @@ package app
 import (
 	"test/internal/repository"
 	"test/internal/service"
-	test "test/transport/httpserver"
-	"test/transport/httpserver/handlers"
+	test "test/internal/transport/httpserver"
+	"test/internal/transport/httpserver/handlers"
 )
 
 func Run() error {

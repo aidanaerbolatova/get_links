@@ -9,7 +9,7 @@ func ConnectDB() (*sqlx.DB, error) {
 		Host:     "localhost",
 		Port:     "5432",
 		Username: "postgres",
-		Password: "qwerty",
+		Password: "postgres",
 		DBName:   "postgres",
 		SSLMode:  "disable",
 	})
