@@ -3,10 +3,12 @@ package service
 import (
 	"test/internal/models"
 	"test/internal/repository"
+
+	"go.uber.org/zap"
 )
 
 type GetData interface {
-	AddToDB(data []models.Data) error
+	AddToDB() error
 	GetLinks(page int) ([]models.Data, error)
 	GetLinkByID(id int) (models.Data, error)
 	AddLink(data models.Data) error
@@ -20,9 +22,9 @@ type Service struct {
 	Client
 }
 
-func NewService(repo *repository.Repository) *Service {
+func NewService(repo *repository.Repository, logger *zap.SugaredLogger) *Service {
 	return &Service{
-		GetData: NewGetDataService(repo),
+		GetData: NewGetDataService(repo, logger),
 		// Cache:   NewCacheService(),
 	}
 }

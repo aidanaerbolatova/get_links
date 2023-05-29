@@ -7,20 +7,22 @@ import (
 	"time"
 
 	"github.com/jmoiron/sqlx"
+	"go.uber.org/zap"
 )
 
-func NewPostgresDB(cfg models.Config) (*sqlx.DB, error) {
+func NewPostgresDB(logger *zap.SugaredLogger, cfg *models.Config) (*sqlx.DB, error) {
 	db, err := sqlx.Connect("postgres", fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=%s", cfg.Host, cfg.Port, cfg.Username, cfg.DBName, cfg.Password, cfg.SSLMode))
 	if err != nil {
+		logger.Errorf("Error while connect to Postgres: %v", err)
 		return nil, err
 	}
 
-	CreateTables(db)
+	CreateTables(db, logger)
 
 	return db, nil
 }
 
-func CreateTables(db *sqlx.DB) {
+func CreateTables(db *sqlx.DB, logger *zap.SugaredLogger) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(10*time.Second))
 	defer cancel()
 	query := `
@@ -31,4 +33,6 @@ func CreateTables(db *sqlx.DB) {
 	)
 	`
 	db.MustExecContext(ctx, query)
+
+	logger.Info("Succesfully create table")
 }

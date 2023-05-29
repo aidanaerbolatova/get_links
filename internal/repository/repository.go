@@ -4,6 +4,7 @@ import (
 	"test/internal/models"
 
 	"github.com/jmoiron/sqlx"
+	"go.uber.org/zap"
 )
 
 type GetData interface {
@@ -20,9 +21,9 @@ type Repository struct {
 	Client
 }
 
-func NewRepository(db *sqlx.DB) *Repository {
+func NewRepository(db *sqlx.DB, logger *zap.SugaredLogger) *Repository {
 	return &Repository{
-		GetData: NewGetDataDB(db),
-		Client:  NewClientDB(db),
+		GetData: NewGetDataDB(db, logger),
+		Client:  NewClientDB(db, logger),
 	}
 }

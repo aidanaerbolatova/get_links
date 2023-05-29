@@ -1,16 +1,12 @@
 package repository
 
 import (
-	"test/config"
+	"test/internal/models"
 
 	"github.com/jmoiron/sqlx"
+	"go.uber.org/zap"
 )
 
-func ConnectDB() (*sqlx.DB, error) {
-	var db *sqlx.DB
-	config, err := config.ParseYaml()
-	if err != nil {
-		return db, err
-	}
-	return NewPostgresDB(config)
+func ConnectDB(logger *zap.SugaredLogger, config *models.Config) (*sqlx.DB, error) {
+	return NewPostgresDB(logger, config)
 }

@@ -1,6 +1,8 @@
 package app
 
 import (
+	"test/config"
+	"test/internal/app/logger"
 	"test/internal/repository"
 	"test/internal/service"
 	test "test/internal/transport/httpserver"
@@ -8,17 +10,24 @@ import (
 )
 
 func Run() error {
-	db, err := repository.ConnectDB()
+	logger, err := logger.Logger()
 	if err != nil {
+		logger.Errorf("Error while initialization logger: %v", err)
 		return err
 	}
-	repository := repository.NewRepository(db)
-	data, err := service.ConvertJson("links.json")
+	config, err := config.ParseYaml()
 	if err != nil {
+		logger.Errorf("Error while parse config file: %v", err)
 		return err
 	}
-	service := service.NewService(repository)
-	if err := service.AddToDB(data); err != nil {
+	db, err := repository.ConnectDB(logger, config)
+	if err != nil {
+		logger.Errorf("Error while connect to DB: %v", err)
+		return err
+	}
+	repository := repository.NewRepository(db, logger)
+	service := service.NewService(repository, logger)
+	if err := service.AddToDB(); err != nil {
 		return err
 	}
 	handlers := handlers.NewHandler(service)
