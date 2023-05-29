@@ -3,21 +3,13 @@ package repository
 import (
 	"context"
 	"fmt"
+	"test/internal/models"
 	"time"
 
 	"github.com/jmoiron/sqlx"
 )
 
-type Config struct {
-	Host     string
-	Port     string
-	Username string
-	Password string
-	DBName   string
-	SSLMode  string
-}
-
-func NewPostgresDB(cfg Config) (*sqlx.DB, error) {
+func NewPostgresDB(cfg models.Config) (*sqlx.DB, error) {
 	db, err := sqlx.Connect("postgres", fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=%s", cfg.Host, cfg.Port, cfg.Username, cfg.DBName, cfg.Password, cfg.SSLMode))
 	if err != nil {
 		return nil, err

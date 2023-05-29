@@ -1,16 +1,16 @@
 package repository
 
 import (
+	"test/config"
+
 	"github.com/jmoiron/sqlx"
 )
 
 func ConnectDB() (*sqlx.DB, error) {
-	return NewPostgresDB(Config{
-		Host:     "localhost",
-		Port:     "5432",
-		Username: "postgres",
-		Password: "postgres",
-		DBName:   "postgres",
-		SSLMode:  "disable",
-	})
+	var db *sqlx.DB
+	config, err := config.ParseYaml()
+	if err != nil {
+		return db, err
+	}
+	return NewPostgresDB(config)
 }
