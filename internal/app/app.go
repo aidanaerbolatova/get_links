@@ -1,6 +1,10 @@
 package app
 
 import (
+	"context"
+	"log"
+	"os"
+	"os/signal"
 	"test/config"
 	"test/internal/app/logger"
 	"test/internal/repository"
@@ -10,6 +14,9 @@ import (
 )
 
 func Run() error {
+	_, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	gracefullyShutdown(cancel)
 	logger, err := logger.Logger()
 	if err != nil {
 		logger.Errorf("Error while initialization logger: %v", err)
@@ -41,4 +48,13 @@ func Run() error {
 		return err
 	}
 	return nil
+}
+
+func gracefullyShutdown(c context.CancelFunc) {
+	osC := make(chan os.Signal, 1)
+	signal.Notify(osC, os.Interrupt)
+	go func() {
+		log.Print(<-osC)
+		c()
+	}()
 }
