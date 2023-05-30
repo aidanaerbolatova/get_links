@@ -17,18 +17,3 @@ func NewPostgresDB(logger *zap.SugaredLogger, cfg *models.Config) (*sqlx.DB, err
 
 	return db, nil
 }
-
-// func CreateTables(db *sqlx.DB, logger *zap.SugaredLogger) {
-// 	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(10*time.Second))
-// 	defer cancel()
-// 	query := `
-// 	CREATE TABLE IF NOT EXISTS links(
-// 		id SERIAL PRIMARY KEY,
-// 		active_link VARCHAR(512),
-// 		history_link VARCHAR(512)
-// 	)
-// 	`
-// 	db.MustExecContext(ctx, query)
-
-// 	logger.Info("Succesfully create table")
-// }
