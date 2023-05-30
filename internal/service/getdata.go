@@ -46,7 +46,7 @@ func (s *GetDataService) AddToDB() error {
 		return err
 	}
 	for _, link := range data {
-		if err := s.repo.AddToDB(link); err != nil {
+		if err := s.repo.AddToDB(&link); err != nil {
 			s.logger.Errorf("Error while add to DB: %v", err)
 			return err
 		}
@@ -54,7 +54,7 @@ func (s *GetDataService) AddToDB() error {
 	return nil
 }
 
-func (s *GetDataService) GetLinks(page int) ([]models.Data, error) {
+func (s *GetDataService) GetLinks(page int) (*[]models.Data, error) {
 	if page != 1 {
 		page = (page - 1) * 30
 	} else {
@@ -68,11 +68,11 @@ func (s *GetDataService) GetLinks(page int) ([]models.Data, error) {
 	return links, nil
 }
 
-func (s *GetDataService) GetLinkByID(id int) (models.Data, error) {
+func (s *GetDataService) GetLinkByID(id int) (*models.Data, error) {
 	link, err := s.repo.GetLinkByID(id)
 	if err != nil {
 		s.logger.Errorf("Error while get link by ID: %v", err)
-		return models.Data{}, err
+		return &models.Data{}, err
 	}
 	return link, nil
 }

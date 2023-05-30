@@ -27,13 +27,17 @@ func Run() error {
 	}
 	repository := repository.NewRepository(db, logger)
 	service := service.NewService(repository, logger)
-	if err := service.AddToDB(); err != nil {
+	handlers := handlers.NewHandler(service)
+
+	err = service.AddToDB()
+	if err != nil {
+		logger.Errorf("Error while add dates to DB: %v", err)
 		return err
 	}
-	handlers := handlers.NewHandler(service)
 
 	srv := new(test.Server)
 	if err := srv.Run("8080", handlers.InitRoute()); err != nil {
+		logger.Errorf("Error while start server: %v", err)
 		return err
 	}
 	return nil
