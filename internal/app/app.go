@@ -14,9 +14,9 @@ import (
 )
 
 func Run() error {
-	_, cancel := context.WithCancel(context.Background())
-	defer cancel()
-	gracefullyShutdown(cancel)
+	// _, cancel := context.WithCancel(context.Background())
+	// defer cancel()
+	// gracefullyShutdown(cancel)
 	logger, err := logger.Logger()
 	if err != nil {
 		logger.Errorf("Error while initialization logger: %v", err)

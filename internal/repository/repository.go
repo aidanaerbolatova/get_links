@@ -15,6 +15,9 @@ type GetData interface {
 	UpdateLink(id int, data models.Data) error
 	DeleteLinkById(id int) error
 }
+type Client interface {
+	Check(link string) (models.Data, error)
+}
 
 type Repository struct {
 	GetData

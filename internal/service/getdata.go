@@ -63,6 +63,7 @@ func (s *GetDataService) GetLinks(page int) (*[]models.Data, error) {
 	links, err := s.repo.GetLinks(page)
 	if err != nil {
 		s.logger.Errorf("Error while get links: %v", err)
+
 		return nil, err
 	}
 	return links, nil

@@ -1,15 +1,14 @@
 package repository
 
 import (
+	"errors"
 	"test/internal/models"
 
 	"github.com/jmoiron/sqlx"
 	"go.uber.org/zap"
 )
 
-type Client interface {
-	Check(link string) (models.Data, error)
-}
+var ErrNoRows = errors.New("no rows found")
 
 type ClientDB struct {
 	db     *sqlx.DB
@@ -29,7 +28,7 @@ func (c *ClientDB) Check(link string) (models.Data, error) {
 	err := row.Scan(&data.Id, &data.Active_link, &data.History_link)
 	if err != nil {
 		c.logger.Errorf("Error while check link in databse: %v", err)
-		return models.Data{}, err
+		return models.Data{}, ErrNoRows
 	}
 	return data, nil
 }

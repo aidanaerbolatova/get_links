@@ -23,5 +23,7 @@ func (h *Handler) InitRoute() *gin.Engine {
 	router.PATCH("/admin/redirects/:id", h.UpdateLink)
 	router.DELETE("/admin/redirects/:id", h.DeleteLinkById)
 
+	router.GET("/redirects", h.CheckLink)
+
 	return router
 }

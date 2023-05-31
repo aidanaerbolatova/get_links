@@ -1,22 +1,22 @@
 package handlers
 
 import (
-	"database/sql"
 	"errors"
 	"net/http"
+	"test/internal/service"
+
+	"github.com/gin-gonic/gin"
 )
 
-func (h *Handler) CheckLink(w http.ResponseWriter, r *http.Request) {
-	link := r.URL.Query().Get("link")
-	code, err := h.service.Check(link)
+func (h *Handler) CheckLink(ctx *gin.Context) {
+	link := ctx.Query("link")
+	statusCode, err := h.service.Check(link)
 	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			http.Redirect(w, r, r.URL.Path, http.StatusMovedPermanently)
+		if errors.Is(err, service.ErrRedirectPage) {
+			ctx.JSON(301, link)
 			return
 		}
-		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
-		return
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, err)
 	}
-	w.WriteHeader(code)
-	w.Write([]byte("Success"))
+	ctx.JSON(statusCode, "Success!")
 }

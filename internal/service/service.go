@@ -16,6 +16,10 @@ type GetData interface {
 	DeleteLinkById(id int) error
 }
 
+type Client interface {
+	Check(link string) (int, error)
+}
+
 type Service struct {
 	GetData
 	Cache
@@ -25,6 +29,7 @@ type Service struct {
 func NewService(repo *repository.Repository, logger *zap.SugaredLogger) *Service {
 	return &Service{
 		GetData: NewGetDataService(repo, logger),
+		Client:  NewClientService(*repo),
 		// Cache:   NewCacheService(),
 	}
 }
