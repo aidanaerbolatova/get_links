@@ -1,0 +1,32 @@
+x-postgres-common:
+  &postgres-common
+  image: postgres:14.2
+  user: postgres
+  environment:
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: postgres
+    POSTGRES_DB: links
+  ports:
+    - 5432:5432
+  healthcheck:
+    test: [ "CMD-SHELL", "pg_isready" ]
+    interval: 10s
+    timeout: 5s
+    retries: 5
+
+services:
+  postgres:
+    <<: *postgres-common
+    restart: always
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_started
+    restart: always
+    volumes:
+      - ./config/.config.yml:/app/config/.config.yml
+      - ./internal/repository/migration:/app/migration
+    
