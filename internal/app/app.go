@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 	"os"
+	"fmt"
 	"os/signal"
 	"test/config"
 	"test/internal/app/logger"
@@ -27,6 +28,7 @@ func Run() error {
 		logger.Errorf("Error while parse config file: %v", err)
 		return err
 	}
+	fmt.Println(config)
 	db, err := repository.ConnectDB(logger, config)
 	if err != nil {
 		logger.Errorf("Error while connect to DB: %v", err)

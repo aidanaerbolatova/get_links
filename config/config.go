@@ -8,7 +8,7 @@ import (
 )
 
 func ParseYaml() (*models.Config, error) {
-	yamlFile, err := ioutil.ReadFile("config/config.yaml")
+	yamlFile, err := ioutil.ReadFile("config/config.yml")
 	if err != nil {
 		return &models.Config{}, err
 	}
