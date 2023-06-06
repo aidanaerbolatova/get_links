@@ -24,8 +24,9 @@ services:
       - postgres
     restart: always
     volumes:
-      - ./config/.config.yml:/app/config/.config.yml
+      - ./config/config.yml:/app/config/config.yml
       - ./internal/repository/migration:/app/migration
+      - ./links.json:/app/links.json
     networks:
       - techno
     environment:

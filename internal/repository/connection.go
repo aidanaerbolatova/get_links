@@ -1,8 +1,10 @@
 package repository
 
 import (
+	"context"
 	"fmt"
 	"test/internal/models"
+	"time"
 
 	"github.com/jmoiron/sqlx"
 	"go.uber.org/zap"
@@ -18,5 +20,20 @@ func NewPostgresDB(logger *zap.SugaredLogger, cfg *models.Config) (*sqlx.DB, err
 		logger.Errorf("Error while connect to Postgres: %v", err)
 		return nil, err
 	}
+
+	CreateTables(db)
+
 	return db, nil
+}
+func CreateTables(db *sqlx.DB) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(10*time.Second))
+	defer cancel()
+	query := `
+	CREATE TABLE IF NOT EXISTS links(
+		id SERIAL PRIMARY KEY,
+		active_link VARCHAR(512),
+		history_link VARCHAR(512)
+	)
+	`
+	db.MustExecContext(ctx, query)
 }
