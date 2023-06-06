@@ -10,8 +10,7 @@ services:
       - "5432:5432"
     volumes:
       - postgres-vol:/var/lib/postgresql/data
-      - ./scripts/postgres-init.sql:/docker-entrypoint-initdb.d/1-init.sql
-      - ./internal/repository/sql-scripts:/docker-entrypoint-initdb.d
+      - ./sql-scripts:/docker-entrypoint-initdb.d
     networks:
       - techno
   app:
