@@ -22,7 +22,6 @@ type Client interface {
 
 type Service struct {
 	GetData
-	Cache
 	Client
 }
 
@@ -30,6 +29,5 @@ func NewService(repo *repository.Repository, logger *zap.SugaredLogger) *Service
 	return &Service{
 		GetData: NewGetDataService(repo, logger),
 		Client:  NewClientService(*repo),
-		// Cache:   NewCacheService(),
 	}
 }
