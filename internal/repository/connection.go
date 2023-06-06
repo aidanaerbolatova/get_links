@@ -13,12 +13,10 @@ func ConnectDB(logger *zap.SugaredLogger, config *models.Config) (*sqlx.DB, erro
 }
 
 func NewPostgresDB(logger *zap.SugaredLogger, cfg *models.Config) (*sqlx.DB, error) {
-	logger.Infof("host=%s port=%s user=%s dbname=%s password=%s sslmode=%s", cfg.Host, cfg.Port, cfg.Username, cfg.DBName, cfg.Password, cfg.SSLMode)
 	db, err := sqlx.Connect("postgres", fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=%s", cfg.Host, cfg.Port, cfg.Username, cfg.DBName, cfg.Password, cfg.SSLMode))
 	if err != nil {
 		logger.Errorf("Error while connect to Postgres: %v", err)
 		return nil, err
 	}
-
 	return db, nil
 }
