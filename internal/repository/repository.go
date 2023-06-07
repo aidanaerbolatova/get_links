@@ -3,6 +3,7 @@ package repository
 import (
 	"test/internal/models"
 
+	"github.com/go-redis/redis"
 	"github.com/jmoiron/sqlx"
 	"go.uber.org/zap"
 )
@@ -19,14 +20,22 @@ type Client interface {
 	Check(link string) (models.Data, error)
 }
 
+type Cache interface {
+	Add(key, value string) error
+	Get(key string) (string, bool)
+	Len() (int, error)
+}
+
 type Repository struct {
 	GetData
 	Client
+	Cache
 }
 
-func NewRepository(db *sqlx.DB, logger *zap.SugaredLogger) *Repository {
+func NewRepository(db *sqlx.DB, redis *redis.Client, logger *zap.SugaredLogger) *Repository {
 	return &Repository{
 		GetData: NewGetDataDB(db, logger),
 		Client:  NewClientDB(db, logger),
+		Cache:   NewRedisCache(redis, logger),
 	}
 }

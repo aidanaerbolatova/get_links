@@ -2,9 +2,9 @@ package app
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"os"
-	"fmt"
 	"os/signal"
 	"test/config"
 	"test/internal/app/logger"
@@ -34,7 +34,12 @@ func Run() error {
 		logger.Errorf("Error while connect to DB: %v", err)
 		return err
 	}
-	repository := repository.NewRepository(db, logger)
+	redis, err := repository.ConnectRedis(logger)
+	if err != nil {
+		logger.Errorf("Error while connect to redis: %v", err)
+		return err
+	}
+	repository := repository.NewRepository(db, redis, logger)
 	service := service.NewService(repository, logger)
 	handlers := handlers.NewHandler(service)
 
