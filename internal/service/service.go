@@ -20,14 +20,21 @@ type Client interface {
 	Check(link string) (int, error)
 }
 
+type Cache interface {
+	Add(key, value string) error
+	Get(key string) (string, bool, error)
+}
+
 type Service struct {
 	GetData
 	Client
+	Cache
 }
 
 func NewService(repo *repository.Repository, logger *zap.SugaredLogger) *Service {
 	return &Service{
 		GetData: NewGetDataService(repo, logger),
 		Client:  NewClientService(*repo),
+		Cache:   NewCacheService(repository.RedisCache{}, logger),
 	}
 }

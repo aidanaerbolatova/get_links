@@ -23,13 +23,13 @@ func (r *RedisCache) Add(key, value string) error {
 	return nil
 }
 
-func (r *RedisCache) Get(key string) (string, bool) {
+func (r *RedisCache) Get(key string) (string, bool, error) {
 	value, err := r.redis.Get(key).Result()
 	if err != nil {
 		r.logger.Errorf("error while get value from redis: %v", err)
-		return "", false
+		return "", false, err
 	}
-	return value, true
+	return value, true, nil
 }
 
 func (r *RedisCache) Len() (int, error) {

@@ -12,6 +12,7 @@ import (
 )
 
 type GetDataService struct {
+	redis  repository.RedisCache
 	repo   repository.GetData
 	logger *zap.SugaredLogger
 }
@@ -75,6 +76,7 @@ func (s *GetDataService) GetLinkByID(id int) (*models.Data, error) {
 		s.logger.Errorf("Error while get link by ID: %v", err)
 		return &models.Data{}, err
 	}
+
 	return link, nil
 }
 

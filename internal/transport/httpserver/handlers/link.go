@@ -23,6 +23,14 @@ func (h *Handler) CreateLink(ctx *gin.Context) {
 	err = json.Unmarshal(body, &request)
 	if err != nil {
 		log.Println("Error while unmarshaling", err)
+		ctx.AbortWithError(http.StatusInternalServerError, err)
+		return
+	}
+
+	if err = h.service.Add(request.Active_link, request.History_link); err != nil {
+		log.Printf("error while add data to redis: %v", err)
+		ctx.AbortWithError(http.StatusInternalServerError, err)
+		return
 	}
 }
 
@@ -65,6 +73,18 @@ func (h *Handler) GetLinkByID(ctx *gin.Context) {
 		ctx.AbortWithError(http.StatusInternalServerError, err)
 		return
 	}
+
+	value, ok, err := h.service.Get(link.Active_link)
+	if !ok || err != nil {
+		log.Println("Error while get link from redis", err)
+		ctx.AbortWithError(http.StatusInternalServerError, err)
+		return
+	}
+
+	if len(value) != 0 {
+		ctx.JSON(http.StatusOK, value)
+	}
+
 	ctx.JSON(http.StatusOK, link)
 }
 
