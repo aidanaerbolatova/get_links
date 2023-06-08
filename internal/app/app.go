@@ -34,7 +34,7 @@ func Run() error {
 		logger.Errorf("Error while connect to DB: %v", err)
 		return err
 	}
-	redis, err := repository.ConnectRedis(logger)
+	redis, err := repository.ConnectRedis(logger, config)
 	if err != nil {
 		logger.Errorf("Error while connect to redis: %v", err)
 		return err

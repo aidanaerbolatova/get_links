@@ -16,7 +16,7 @@ func ConnectDB(logger *zap.SugaredLogger, config *models.Config) (*sqlx.DB, erro
 	return NewPostgresDB(logger, config)
 }
 
-func ConnectRedis(logger *zap.SugaredLogger) (*redis.Client, error) {
+func ConnectRedis(logger *zap.SugaredLogger, cfg *models.Config) (*redis.Client, error) {
 	return NewRedisCacheDB(logger)
 }
 
@@ -29,7 +29,7 @@ func NewPostgresDB(logger *zap.SugaredLogger, cfg *models.Config) (*sqlx.DB, err
 	return db, nil
 }
 
-func NewRedisCacheDB(logger *zap.SugaredLogger) (*redis.Client, error) {
+func NewRedisCacheDB(logger *zap.SugaredLogger, cfg *models.Config) (*redis.Client, error) {
 	redisHost := os.Getenv("REDIS_HOST")
 	redisPort, err := strconv.Atoi(os.Getenv("REDIS_PORT"))
 	if err != nil {
