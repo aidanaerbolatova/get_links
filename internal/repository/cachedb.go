@@ -20,6 +20,14 @@ func (r *RedisCache) Add(key, value string) error {
 		r.logger.Errorf("error while add key, value to redis: %v", err)
 		return err
 	}
+
+	ttl := 300 //TTL in seconds
+	err = r.redis.Expire(key, time.Duration(ttl)*time.Second).Err()
+	if err != nil {
+		r.logger.Errorf("error while add ttl: %v", err)
+		return err
+	}
+
 	return nil
 }
 
