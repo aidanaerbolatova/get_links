@@ -17,7 +17,7 @@ func ConnectDB(logger *zap.SugaredLogger, config *models.Config) (*sqlx.DB, erro
 }
 
 func ConnectRedis(logger *zap.SugaredLogger, cfg *models.Config) (*redis.Client, error) {
-	return NewRedisCacheDB(logger)
+	return NewRedisCacheDB(logger, cfg)
 }
 
 func NewPostgresDB(logger *zap.SugaredLogger, cfg *models.Config) (*sqlx.DB, error) {
