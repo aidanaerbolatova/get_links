@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"errors"
 	"fmt"
 	"test/internal/models"
 	"time"
@@ -37,10 +38,12 @@ func NewRedisCacheDB(logger *zap.SugaredLogger, cfg *models.Config) (*redis.Clie
 		ReadTimeout: 100 * time.Millisecond,
 	})
 
-	if _, err := client.Ping().Result(); err != nil {
-		logger.Errorf("error while ping redis: %v", err)
-		return nil, err
+	if err := client.Ping(); err != nil {
+		logger.Error("error while ping redis")
+		return nil, errors.New("error while ping")
 	}
+
+	defer client.Close()
 
 	return client, nil
 }

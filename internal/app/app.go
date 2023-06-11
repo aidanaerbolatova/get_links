@@ -15,9 +15,9 @@ import (
 )
 
 func Run() error {
-	// _, cancel := context.WithCancel(context.Background())
-	// defer cancel()
-	// gracefullyShutdown(cancel)
+	_, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	gracefullyShutdown(cancel)
 	logger, err := logger.Logger()
 	if err != nil {
 		logger.Errorf("Error while initialization logger: %v", err)
@@ -43,17 +43,20 @@ func Run() error {
 	service := service.NewService(repository, logger)
 	handlers := handlers.NewHandler(service)
 
-	err = service.AddToDB()
+	data, err := service.AddToDB()
 	if err != nil {
 		logger.Errorf("Error while add dates to DB: %v", err)
 		return err
 	}
+
+	handlers.CacheWarming(data)
 
 	srv := new(test.Server)
 	if err := srv.Run("8080", handlers.InitRoute()); err != nil {
 		logger.Errorf("Error while start server: %v", err)
 		return err
 	}
+
 	return nil
 }
 

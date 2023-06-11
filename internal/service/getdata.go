@@ -40,19 +40,19 @@ func ConvertJson(file string, logger *zap.SugaredLogger) ([]models.Data, error) 
 	return data, nil
 }
 
-func (s *GetDataService) AddToDB() error {
+func (s *GetDataService) AddToDB() ([]models.Data, error) {
 	data, err := ConvertJson("links.json", s.logger)
 	if err != nil {
 		s.logger.Errorf("Error while convert json: %v", err)
-		return err
+		return nil, err
 	}
 	for _, link := range data {
 		if err := s.repo.AddToDB(&link); err != nil {
 			s.logger.Errorf("Error while add to DB: %v", err)
-			return err
+			return nil, err
 		}
 	}
-	return nil
+	return data, nil
 }
 
 func (s *GetDataService) GetLinks(page int) (*[]models.Data, error) {

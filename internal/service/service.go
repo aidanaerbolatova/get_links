@@ -8,7 +8,7 @@ import (
 )
 
 type GetData interface {
-	AddToDB() error
+	AddToDB() ([]models.Data, error)
 	GetLinks(page int) (*[]models.Data, error)
 	GetLinkByID(id int) (*models.Data, error)
 	AddLink(data models.Data) error
