@@ -14,9 +14,12 @@ services:
     networks:
       - techno
   redis:
+    container_name: redis
     image: redis:latest
     ports:
       - 6379:6379
+    networks:
+      - redis_test
   app:
     container_name: myapp
     build:
@@ -38,6 +41,8 @@ services:
       - APP_MODE=DEV
 networks:
   techno:
+    driver: bridge
+  redis_test:
     driver: bridge
 
 volumes:

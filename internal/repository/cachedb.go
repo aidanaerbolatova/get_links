@@ -23,8 +23,7 @@ func (r *RedisCache) Add(key, value string) error {
 		return err
 	}
 
-	ttl := 300 //TTL in seconds
-	err = r.redis.Expire(key, time.Duration(ttl)*time.Second).Err()
+	err = r.redis.Expire(key, time.Duration(24)*time.Hour).Err()
 	if err != nil {
 		r.logger.Errorf("error while add ttl: %v", err)
 		return err

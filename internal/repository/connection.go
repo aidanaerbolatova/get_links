@@ -2,8 +2,6 @@ package repository
 
 import (
 	"fmt"
-	"os"
-	"strconv"
 	"test/internal/models"
 	"time"
 
@@ -30,14 +28,7 @@ func NewPostgresDB(logger *zap.SugaredLogger, cfg *models.Config) (*sqlx.DB, err
 }
 
 func NewRedisCacheDB(logger *zap.SugaredLogger, cfg *models.Config) (*redis.Client, error) {
-	redisHost := os.Getenv("REDIS_HOST")
-	redisPort, err := strconv.Atoi(os.Getenv("REDIS_PORT"))
-	if err != nil {
-		logger.Errorf("error while get redis post: %v", err)
-		return nil, err
-	}
-
-	redisUri := fmt.Sprintf("%s:%d", redisHost, redisPort)
+	redisUri := fmt.Sprintf("%s:%s", cfg.HostRedis, cfg.PortRedis)
 
 	client := redis.NewClient(&redis.Options{
 		Addr:        redisUri,

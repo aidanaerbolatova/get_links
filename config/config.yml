@@ -1,6 +1,10 @@
-host: postgres
-port: 5432
-username: postgres
-password: postgres
-dbname: links
-sslmode: disable
+postgres:
+  host: postgres
+  port: 5432
+  username: postgres
+  password: postgres
+  dbname: links
+  sslmode: disable
+redis:
+  host: redis
+  port: 6379
