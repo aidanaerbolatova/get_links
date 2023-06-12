@@ -37,6 +37,7 @@ services:
       - ./links.json:/app/links.json
     networks:
       - techno
+      - redis_test
     environment:
       - APP_MODE=DEV
 networks:

@@ -23,7 +23,7 @@ type Client interface {
 type Cache interface {
 	Add(key, value string) error
 	Get(key string) (string, bool, error)
-	Len() (int, error)
+	// Len() (int, error)
 }
 
 type Repository struct {

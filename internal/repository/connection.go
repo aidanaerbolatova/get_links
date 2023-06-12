@@ -1,7 +1,6 @@
 package repository
 
 import (
-	"errors"
 	"fmt"
 	"test/internal/models"
 	"time"
@@ -29,18 +28,18 @@ func NewPostgresDB(logger *zap.SugaredLogger, cfg *models.Config) (*sqlx.DB, err
 }
 
 func NewRedisCacheDB(logger *zap.SugaredLogger, cfg *models.Config) (*redis.Client, error) {
-	redisUri := fmt.Sprintf("%s:%s", cfg.HostRedis, cfg.PortRedis)
+	// redisUri := fmt.Sprintf("%s:%s", cfg.HostRedis, cfg.PortRedis)
 
 	client := redis.NewClient(&redis.Options{
-		Addr:        redisUri,
+		Addr:        "redis:6379",
 		DB:          0,
 		DialTimeout: 100 * time.Millisecond,
 		ReadTimeout: 100 * time.Millisecond,
 	})
 
-	if err := client.Ping(); err != nil {
+	if _, err := client.Ping().Result(); err != nil {
 		logger.Error("error while ping redis")
-		return nil, errors.New("error while ping")
+		return nil, err
 	}
 
 	defer client.Close()

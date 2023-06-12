@@ -41,11 +41,11 @@ func (r *RedisCache) Get(key string) (string, bool, error) {
 	return value, true, nil
 }
 
-func (r *RedisCache) Len() (int, error) {
-	len, err := r.redis.DBSize().Result()
-	if err != nil {
-		r.logger.Errorf("error while get len of the cache: %v", err)
-		return 0, err
-	}
-	return int(len), nil
-}
+// func (r *RedisCache) Len() (int, error) {
+// 	len, err := r.redis.DBSize().Result()
+// 	if err != nil {
+// 		r.logger.Errorf("error while get len of the cache: %v", err)
+// 		return 0, err
+// 	}
+// 	return int(len), nil
+// }

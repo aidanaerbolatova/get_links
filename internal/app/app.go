@@ -23,7 +23,7 @@ func Run() error {
 		logger.Errorf("Error while initialization logger: %v", err)
 		return err
 	}
-	config, err := config.ParseYaml()
+	config, err := config.ReadConfig()
 	if err != nil {
 		logger.Errorf("Error while parse config file: %v", err)
 		return err
@@ -43,13 +43,13 @@ func Run() error {
 	service := service.NewService(repository, logger)
 	handlers := handlers.NewHandler(service)
 
-	data, err := service.AddToDB()
+	_, err = service.AddToDB()
 	if err != nil {
 		logger.Errorf("Error while add dates to DB: %v", err)
 		return err
 	}
 
-	handlers.CacheWarming(data)
+	// handlers.CacheWarming(data)
 
 	srv := new(test.Server)
 	if err := srv.Run("8080", handlers.InitRoute()); err != nil {
