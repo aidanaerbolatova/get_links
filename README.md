@@ -23,7 +23,7 @@ GET /redirects - метод для перенаправления пользов
 - Требуется имплементировать cache. Кэш должен быть использован для сохранения запрашиваемых ссылок и ссылок куда нужно перенаправлять пользователя в памяти, для того чтобы постоянно не обращаться к базе данных.
 
 
--PostgreSQL(migration), Redis(TTL, Cacge warning), Config(viper), Logger(zap.SugaredLogger)
+- PostgreSQL(migration, sql-script), Redis(TTL, Cacge warning), Config(viper), Logger(zap.SugaredLogger), Dockerfile, Docker-Compose
 
 ## Usage
 ```
