@@ -28,10 +28,10 @@ func NewPostgresDB(logger *zap.SugaredLogger, cfg *models.Config) (*sqlx.DB, err
 }
 
 func NewRedisCacheDB(logger *zap.SugaredLogger, cfg *models.Config) (*redis.Client, error) {
-	// redisUri := fmt.Sprintf("%s:%s", cfg.HostRedis, cfg.PortRedis)
+	redisUri := fmt.Sprintf("%s:%s", cfg.HostRedis, cfg.PortRedis)
 
 	client := redis.NewClient(&redis.Options{
-		Addr:        "redis:6379",
+		Addr:        redisUri,
 		DB:          0,
 		DialTimeout: 100 * time.Millisecond,
 		ReadTimeout: 100 * time.Millisecond,

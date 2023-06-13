@@ -13,4 +13,7 @@ migrateup:
 migratedown:
 	migrate -path internal/repository/migration -database "postgresql://postgres:postgres@localhost:5432/links?sslmode=disable" -verbose down
 
-.PHONY: postgres createdb dropdb migrateup migratedown
+run:
+	docker-compose up --build
+
+.PHONY: postgres createdb dropdb migrateup migratedown run
