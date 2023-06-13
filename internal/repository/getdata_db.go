@@ -20,12 +20,17 @@ func NewGetDataDB(db *sqlx.DB, logger *zap.SugaredLogger) *GetDataDB {
 }
 
 func (r *GetDataDB) AddToDB(data *models.Data) error {
-	_, err := r.db.Exec("INSERT INTO links (active_link,history_link) VALUES ($1, $2)", data.Active_link, data.History_link)
+	tx, err := r.db.Begin()
 	if err != nil {
-		r.logger.Errorf("Error while insert data to DB: %v", err)
 		return err
 	}
-	return nil
+	_, err = r.db.Exec("INSERT INTO links (active_link,history_link) VALUES ($1, $2)", data.Active_link, data.History_link)
+	if err != nil {
+		r.logger.Errorf("Error while insert data to DB: %v", err)
+		tx.Rollback()
+		return err
+	}
+	return tx.Commit()
 }
 
 func (r *GetDataDB) GetLinks(page int) (*[]models.Data, error) {
@@ -57,16 +62,22 @@ func (r *GetDataDB) GetLinkByID(id int) (*models.Data, error) {
 }
 
 func (r *GetDataDB) AddLink(data models.Data) error {
+	tx, err := r.db.Begin()
+	if err != nil {
+		return err
+	}
 	query, err := r.db.Prepare("INSERT INTO links(active_link, history_link) VALUES ($1, $2)")
 	if err != nil {
 		r.logger.Errorf("Error while add link in DB: %v", err)
+		tx.Rollback()
 		return err
 	}
 	if _, err := query.Exec(&data.Active_link, &data.History_link); err != nil {
 		r.logger.Errorf("Error while add link in DB: %v", err)
+		tx.Rollback()
 		return err
 	}
-	return nil
+	return tx.Commit()
 }
 
 func (r *GetDataDB) UpdateLink(id int, data models.Data) error {
