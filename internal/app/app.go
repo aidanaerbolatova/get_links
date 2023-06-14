@@ -39,7 +39,7 @@ func Run() error {
 		logger.Errorf("Error while connect to redis: %v", err)
 		return err
 	}
-	repository := repository.NewRepository(db, redis, logger)
+	repository := repository.NewRepository(db, redis, logger, config)
 	service := service.NewService(repository, logger)
 	handlers := handlers.NewHandler(service)
 

@@ -31,10 +31,10 @@ type Repository struct {
 	Cache
 }
 
-func NewRepository(db *sqlx.DB, redis *redis.Client, logger *zap.SugaredLogger) *Repository {
+func NewRepository(db *sqlx.DB, redis *redis.Client, logger *zap.SugaredLogger, cfg *models.Config) *Repository {
 	return &Repository{
-		GetData: NewGetDataDB(db, logger),
-		Client:  NewClientDB(db, logger),
+		GetData: NewGetDataDB(db, logger, cfg),
+		Client:  NewClientDB(db, logger, cfg),
 		Cache:   NewRedisCache(redis, logger),
 	}
 }

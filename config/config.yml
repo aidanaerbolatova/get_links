@@ -5,6 +5,7 @@ postgres:
   password: postgres
   dbname: links
   sslmode: disable
+  requestTimeout: 5
 redis:
   host: redis
   port: 6379

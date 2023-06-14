@@ -17,13 +17,14 @@ func ReadConfig() (*models.Config, error) {
 	}
 
 	return &models.Config{
-		Host:      viper.GetString("postgres.host"),
-		Port:      viper.GetString("postgres.port"),
-		Username:  viper.GetString("postgres.username"),
-		Password:  viper.GetString("postgres.password"),
-		DBName:    viper.GetString("postgres.dbname"),
-		SSLMode:   viper.GetString("postgres.sslmode"),
-		HostRedis: viper.GetString("redis.host"),
-		PortRedis: viper.GetString("redis.port"),
+		Host:           viper.GetString("postgres.host"),
+		Port:           viper.GetString("postgres.port"),
+		Username:       viper.GetString("postgres.username"),
+		Password:       viper.GetString("postgres.password"),
+		DBName:         viper.GetString("postgres.dbname"),
+		SSLMode:        viper.GetString("postgres.sslmode"),
+		RequestTimeout: viper.GetInt("postgres.requestTimeout"),
+		HostRedis:      viper.GetString("redis.host"),
+		PortRedis:      viper.GetString("redis.port"),
 	}, nil
 }
