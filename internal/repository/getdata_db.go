@@ -3,7 +3,6 @@ package repository
 import (
 	"context"
 	"test/internal/models"
-	"time"
 
 	"github.com/jmoiron/sqlx"
 	"go.uber.org/zap"
@@ -24,7 +23,7 @@ func NewGetDataDB(db *sqlx.DB, logger *zap.SugaredLogger, cfg *models.Config) *G
 }
 
 func (r *GetDataDB) AddToDB(data *models.Data) error {
-	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(r.cfg.RequestTimeout)*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), r.cfg.RequestTimeout)
 	defer cancel()
 
 	tx, err := r.db.Begin()
@@ -41,7 +40,7 @@ func (r *GetDataDB) AddToDB(data *models.Data) error {
 }
 
 func (r *GetDataDB) GetLinks(page int) (*[]models.Data, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(r.cfg.RequestTimeout)*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), r.cfg.RequestTimeout)
 	defer cancel()
 
 	var links []models.Data
@@ -64,7 +63,7 @@ func (r *GetDataDB) GetLinks(page int) (*[]models.Data, error) {
 }
 
 func (r *GetDataDB) GetLinkByID(id int) (*models.Data, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(r.cfg.RequestTimeout)*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), r.cfg.RequestTimeout)
 	defer cancel()
 
 	var link models.Data
@@ -76,7 +75,7 @@ func (r *GetDataDB) GetLinkByID(id int) (*models.Data, error) {
 }
 
 func (r *GetDataDB) AddLink(data models.Data) error {
-	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(r.cfg.RequestTimeout)*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), r.cfg.RequestTimeout)
 	defer cancel()
 
 	tx, err := r.db.Begin()
@@ -98,7 +97,7 @@ func (r *GetDataDB) AddLink(data models.Data) error {
 }
 
 func (r *GetDataDB) UpdateLink(id int, data models.Data) error {
-	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(r.cfg.RequestTimeout)*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), r.cfg.RequestTimeout)
 	defer cancel()
 
 	link, err := r.GetLinkByID(id)
@@ -115,7 +114,7 @@ func (r *GetDataDB) UpdateLink(id int, data models.Data) error {
 }
 
 func (r *GetDataDB) DeleteLinkById(id int) error {
-	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(r.cfg.RequestTimeout)*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), r.cfg.RequestTimeout)
 	defer cancel()
 
 	_, err := r.db.ExecContext(ctx, "DELETE FROM links WHERE id=$1", id)

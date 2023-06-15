@@ -23,7 +23,7 @@ func ReadConfig() (*models.Config, error) {
 		Password:       viper.GetString("postgres.password"),
 		DBName:         viper.GetString("postgres.dbname"),
 		SSLMode:        viper.GetString("postgres.sslmode"),
-		RequestTimeout: viper.GetInt("postgres.requestTimeout"),
+		RequestTimeout: viper.GetDuration("postgres.requestTimeout"),
 		HostRedis:      viper.GetString("redis.host"),
 		PortRedis:      viper.GetString("redis.port"),
 	}, nil
